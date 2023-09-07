@@ -1,0 +1,56 @@
+version: "3.8"
+name: auth
+
+services:
+   auth_service:
+     build:
+       context: .
+       dockerfile: Dockerfile
+     container_name: auth_service
+     env_file:
+       - .env-non-dev
+     depends_on:
+       - db_auth
+       - redis_auth
+       - celery_auth
+     command: ["./scripts/app.sh"]
+     networks:
+       - auth
+     ports:
+       - 8000:8000
+
+   db_auth:
+    image: postgres:15
+    container_name: db_auth
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env-non-dev
+    networks:
+      - auth
+    # restart: unless-stopped
+
+   redis_auth:
+    image: redis:7
+    container_name: redis_auth
+    networks:
+      - auth
+
+   celery_auth:
+     image: celery:arm64v8
+     build:
+       context: .
+     container_name: celery_auth
+     # command: [ "./scripts/celery.sh", "celery_app" ]
+     command: sh -c "celery --app=app.tasks.celery_app:celery_app worker -l INFO"
+     env_file:
+       - .env-non-dev
+     depends_on:
+       - redis_auth
+     networks:
+       - auth
+
+networks:
+   auth:
+    name: auth
+    driver: bridge

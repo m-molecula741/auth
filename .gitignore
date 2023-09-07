@@ -111,7 +111,6 @@ venv.bak/
 
 # Project
 dbdata
-docker-compose.yml
 /docs
 /recommendations
 
