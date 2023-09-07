@@ -1,0 +1,23 @@
+[flake8]
+ignore = ANN101, ANN002, ANN003, A003, D400, ANN401
+; A003 class attribute "..." is shadowing a python builtin
+; ANN101 Missing type annotation for self in method
+; ANN002 Missing type annotation for *args
+; ANN003 Missing type annotation for **kwargs
+; D400 First line should end with a period
+
+max-line-length = 120
+max-complexity = 10
+exclude =
+    __init__.py,
+    .git,
+    __pycache__,
+    venv,
+    docker,
+    migrations,
+    .venv/
+
+per-file-ignores =  test_*.py: D103
+import_order_style = pep8
+application_import_names = app, tests
+inline-quotes = ""
