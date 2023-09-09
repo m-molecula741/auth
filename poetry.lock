@@ -1451,6 +1451,24 @@ pipfile-deprecated-finder = ["pipreqs", "requirementslib"]
 requirements-deprecated-finder = ["pip-api", "pipreqs"]
 
 [[package]]
+name = "jinja2"
+version = "3.1.2"
+description = "A very fast and expressive template engine."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "Jinja2-3.1.2-py3-none-any.whl", hash = "sha256:6088930bfe239f0e6710546ab9c19c9ef35e29792895fed6e6e31a023a182a61"},
+    {file = "Jinja2-3.1.2.tar.gz", hash = "sha256:31351a702a408a9e7595a8fc6150fc3f43bb6bf7e319770cbc0db9df9437e852"},
+]
+
+[package.dependencies]
+MarkupSafe = ">=2.0"
+
+[package.extras]
+i18n = ["Babel (>=2.7)"]
+
+[[package]]
 name = "kombu"
 version = "5.3.2"
 description = "Messaging library for Python."
@@ -3335,4 +3353,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f69cff43ac6b14a8f56f647a788ccc7c8c4aa223740390b7219c8350347128c6"
+content-hash = "a1b4c2d2dcf51f7ecdbcd593448c1461026826bf807ca7f5e1eb81e81c13e6ff"

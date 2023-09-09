@@ -1,0 +1,109 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    width: 350px;
+    background-color: #efefef;
+    border: none;
+    cursor: pointer;
+    transition: all 0.5s;
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.card .image img {
+    transition: all 0.5s;
+    border-radius: 50%;
+}
+
+.card:hover .image img {
+    transform: scale(1.1);
+}
+
+.form-icon {
+    color: #ac40ab;
+    font-size: 55px;
+    text-align: center;
+    line-height: 100px;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    border-radius: 50px;
+    box-shadow: 7px 7px 10px #cbced1, -7px -7px 10px #fff;
+}
+
+.name {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 1.5rem;
+    color: #ac40ab;
+}
+
+.idd {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.idd1 {
+    font-size: 12px;
+}
+
+.number {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 1.5rem;
+}
+
+.follow {
+    font-size: 12px;
+    font-weight: 500;
+    color: #ac40ab;
+    margin-top: 0.5rem;
+}
+
+.btn1 {
+    height: 40px;
+    width: 150px;
+    border: none;
+    background-color: #ac40ab;
+    color: #aeaeae;
+    font-size: 15px;
+    border-radius: 6px;
+    margin-top: 1.5rem;
+}
+
+.text span {
+    font-size: 13px;
+    color: #545454;
+    font-weight: 500;
+}
+
+.join {
+    font-size: 14px;
+    color: #a0a0a0;
+    font-weight: bold;
+    padding: 5px 10px;
+    background-color: #ccc;
+    border-radius: 6px;
+    margin-top: 1.5rem;
+}

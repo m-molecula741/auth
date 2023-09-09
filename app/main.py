@@ -9,6 +9,9 @@ from app.core.logger import logger
 from app.core.middleware import add_process_time_handler
 from app.routers.routers import router_private, router_public
 from redis import asyncio as aioredis
+from app.pages.router import router as router_pages
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 
 def get_app() -> FastAPI:
@@ -35,6 +38,25 @@ def get_app() -> FastAPI:
 
     app.include_router(router_private, prefix="/private")
     app.include_router(router_public, prefix="/public")
+    app.include_router(router_pages)
+
+    origins = [
+        "http://127.0.0.1:8000"
+    ]
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=origins,
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATCH", "PUT"],
+        allow_headers=[
+            "Content-Type",
+            "Set-Cookie",
+            "Access-Control-Allow-Headers",
+            "Access-Control-Allow-Origin",
+            "Authorization",
+        ],
+    )
+    app.mount("/static", StaticFiles(directory="app/static"), "static")
 
     return app
 
