@@ -24,6 +24,7 @@ router = APIRouter()
 async def create_user(
     user: UserCreateRequest, uow: UOWDep, redis: Redis = Depends(get_redis)
 ) -> ObjSchema:
+    print("зашел")
     return await UserService.register_new_user(uow, user, redis)
 
 
