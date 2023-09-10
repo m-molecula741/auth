@@ -23,5 +23,5 @@ router_private.include_router(
     private_users.router, tags=["Private users routers"], prefix="/users"
 )
 router_private.include_router(
-    private_auth.router, tags=["Private auth routers"], prefix="/user/auth"
+    private_auth.router, tags=["Private auth routers"], prefix="/auth"
 )

@@ -6,7 +6,8 @@ async function loginUser() {
 
         const response = await fetch(url, {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include'
         });
 
         if (response.status === 201) {

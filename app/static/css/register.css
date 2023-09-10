@@ -1,4 +1,9 @@
 .form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
     background: #ecf0f3;
     font-family: 'Nunito', sans-serif;
     padding: 40px;

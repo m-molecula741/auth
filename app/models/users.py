@@ -8,6 +8,7 @@ from app.db.database import Base
 from sqlalchemy.dialects.postgresql import UUID
 from uuid import UUID as py_UUID
 from pydantic import EmailStr
+from datetime import datetime
 
 
 class UserModel(Base):
@@ -24,6 +25,11 @@ class UserModel(Base):
     hashed_password: Mapped[str] = mapped_column(sa.String, nullable=False)
     name: Mapped[str] = mapped_column(sa.String(50), nullable=False)
     surname: Mapped[str] = mapped_column(sa.String(50), nullable=False)
+    description: Mapped[str] = mapped_column(sa.String(50), nullable=True)
+    image_url: Mapped[str] = mapped_column(sa.String(50), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        sa.DateTime, default=datetime.utcnow, nullable=False
+    )
     is_active: Mapped[bool] = mapped_column(sa.Boolean, default=True)
     is_verified: Mapped[bool] = mapped_column(sa.Boolean, default=False)
     is_superuser: Mapped[bool] = mapped_column(sa.Boolean, default=False)
