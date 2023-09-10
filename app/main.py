@@ -36,10 +36,6 @@ def get_app() -> FastAPI:
         FastAPICache.reset()
         logger.info("Redis connection close")
 
-    app.include_router(router_private, prefix="/private")
-    app.include_router(router_public, prefix="/public")
-    app.include_router(router_pages)
-
     origins = [
         "http://127.0.0.1:8000"
     ]
@@ -54,8 +50,13 @@ def get_app() -> FastAPI:
             "Access-Control-Allow-Headers",
             "Access-Control-Allow-Origin",
             "Authorization",
+            "Access-Control-Allow-Credentials"
         ],
     )
+
+    app.include_router(router_private, prefix="/private")
+    app.include_router(router_public, prefix="/public")
+    app.include_router(router_pages)
     app.mount("/static", StaticFiles(directory="app/static"), "static")
 
     return app

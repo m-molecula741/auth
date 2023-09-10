@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: #000;
+    background-color: white;
 }
 
 .container {
@@ -72,6 +72,7 @@ body {
     font-size: 22px;
     font-weight: bold;
     margin-top: 1.5rem;
+    color: #ac40ab;
 }
 
 .follow {

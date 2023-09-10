@@ -1,10 +1,12 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import EmailStr
 
+from app.models.users import UserModel
+from app.routers.dependencies import get_current_active_user
 
 router = APIRouter(prefix="/pages", tags=["Frontend"])
 
@@ -29,5 +31,8 @@ async def get_login_page(request: Request):
 
 
 @router.get("/profile", response_class=HTMLResponse)
-async def get_profile_page(request: Request):
-    return templates.TemplateResponse("profile.html", {"request": request})
+async def get_profile_page(
+    request: Request,
+    user: UserModel = Depends(get_current_active_user),
+):
+    return templates.TemplateResponse("profile.html", {"request": request, "user": user})
