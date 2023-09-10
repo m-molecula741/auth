@@ -18,7 +18,6 @@ UOWDep = Annotated[UOW, Depends(UOW)]
 async def get_current_user(
     uow: UOW = Depends(UOW), token: str = Depends(oauth2_scheme)
 ) -> UserModel | None:
-    print("token with oauth2 ", token)
     try:
         payload = jwt.decode(token, config.secret_key, algorithms=[config.algorithm])
         user_id = payload.get("sub")

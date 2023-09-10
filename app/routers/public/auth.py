@@ -23,20 +23,16 @@ async def login(
     response: Response,
     credentials: OAuth2PasswordRequestForm = Depends(),
 ) -> ObjSchema:
-    print(credentials)
     user = await AuthService.authenticate_user(  # type: ignore
         credentials.username, credentials.password, uow
     )
-    print(user)
 
     token = await AuthService.create_token(user.id, uow)
-    print(token)
-    print("дошли до сюды")
     response.set_cookie(
         "access_token",
         token.access_token,
         max_age=config.access_token_expire_minutes * 60,
-        httponly=True,
+        httponly=True
     )
     response.set_cookie(
         "refresh_token",
