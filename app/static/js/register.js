@@ -1,5 +1,5 @@
 async function registerUser() {
-        const url = "http://localhost:8000/public/users/registration";
+        const url = "http://127.0.0.1:8000/public/users/registration";
         const data = {
             name: document.getElementById("name").value,
             surname: document.getElementById("surname").value,

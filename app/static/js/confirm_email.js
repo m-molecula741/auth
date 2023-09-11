@@ -1,5 +1,5 @@
 async function confirmUser() {
-            const url = "http://localhost:8000/public/users/registration/confirm";
+            const url = "http://127.0.0.1:8000/public/users/registration/confirm";
             const data = {
             code: document.getElementById("code").value
             };
@@ -17,7 +17,7 @@ async function confirmUser() {
             });
         }
 async function resendEmail() {
-    const url = "http://localhost:8000/public/users/resending";
+    const url = "http://127.0.0.1:8000/public/users/resending";
     const data = {
     id: '{{ id }}',
     email: '{{ email }}'
