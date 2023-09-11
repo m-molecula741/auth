@@ -1,5 +1,5 @@
 async function loginUser() {
-    const url = "http://localhost:8000/public/auth/login";
+    const url = "http://127.0.0.1:8000/public/auth/login";
     const formData = new FormData();
     formData.append('username', document.getElementById('email').value);
     formData.append('password', document.getElementById('password').value);
