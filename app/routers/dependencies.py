@@ -10,7 +10,7 @@ from app.services.users_service import UserService
 from app.utils.users_utils import OAuth2PasswordBearerWithCookie
 
 
-oauth2_scheme = OAuth2PasswordBearerWithCookie(token_url="/public/auth/login")
+oauth2_scheme = OAuth2PasswordBearerWithCookie(token_url="/pages/profile")
 
 UOWDep = Annotated[UOW, Depends(UOW)]
 

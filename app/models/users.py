@@ -70,6 +70,7 @@ class UserDeactivate(ObjSchema):
 class BaseUserUpdate(ObjSchema):
     name: str | None = None
     surname: str | None = None
+    description: str | None = None
 
 
 class UserUpdateIn(BaseUserUpdate):
@@ -85,6 +86,8 @@ class UserResponse(ObjSchema):
     email: EmailStr
     name: str
     surname: str
+    description: str
+    created_at: str
 
 
 class UserVerifyEmail(ObjSchema):

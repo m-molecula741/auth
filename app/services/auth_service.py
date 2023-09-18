@@ -139,9 +139,8 @@ class AuthService:
     def _create_access_token(cls, user_id: UUID) -> str:
         to_encode = {
             "sub": str(user_id),
-            "exp": datetime.utcnow() + timedelta(
-                minutes=config.access_token_expire_minutes
-            ),
+            "exp": datetime.utcnow()
+            + timedelta(minutes=config.access_token_expire_minutes),
         }
         encoded_jwt = jwt.encode(
             to_encode, config.secret_key, algorithm=config.algorithm
