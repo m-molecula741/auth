@@ -33,6 +33,19 @@ async def get_login_page(request: Request):
 @router.get("/profile", response_class=HTMLResponse)
 async def get_profile_page(
     request: Request,
-    user: UserModel = Depends(get_current_active_user),
 ):
-    return templates.TemplateResponse("profile.html", {"request": request, "user": user})
+    return templates.TemplateResponse("profile.html", {"request": request})
+
+
+@router.get("/edit/user", response_class=HTMLResponse)
+async def get_edit_user_page(
+    request: Request,
+):
+    return templates.TemplateResponse("edit_user.html", {"request": request})
+
+
+@router.get("/reset/password", response_class=HTMLResponse)
+async def get_edit_user_page(
+    request: Request,
+):
+    return templates.TemplateResponse("reset_password.html", {"request": request})

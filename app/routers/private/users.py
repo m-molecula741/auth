@@ -10,6 +10,7 @@ from app.services.users_service import UserService
 from app.services.auth_service import AuthService
 from app.core.base_schemas import ObjSchema
 from fastapi.responses import ORJSONResponse
+from datetime import datetime
 
 
 router = APIRouter()
@@ -44,4 +45,14 @@ async def get_user(
     current_user: UserModel = Depends(get_current_active_user),
 ) -> ObjSchema:
     db_user = await UserService.get_user(current_user.id, uow)
-    return UserResponse(email=db_user.email, name=db_user.name, surname=db_user.surname)
+    created_at_datetime = db_user.created_at
+    # Преобразовать формат datetime в формат "день месяц год"
+    formatted_created_at = created_at_datetime.strftime("%d %B %Y")
+
+    return UserResponse(
+        email=db_user.email,
+        name=db_user.name,
+        surname=db_user.surname,
+        description=db_user.description,
+        created_at=formatted_created_at,
+    )

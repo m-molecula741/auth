@@ -11,8 +11,14 @@ async function loginUser() {
     });
 
     if (response.status === 201) {
-        const responseData = await response.json();
-        const url = `/pages/profile`;
-        window.location.href = url;
-    }
+      const responseData = await response.json();
+      const url = `/pages/profile`;
+      window.location.href = url;
+} else if (response.status === 422) {
+  window.authError.showModal()
+
+  } else if (response.status === 401){
+    window.passwordError.showModal()
+    console.log("Произошла ошибка:", response.status);
+  }
 }

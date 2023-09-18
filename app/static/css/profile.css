@@ -12,11 +12,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    background-color: white;
 }
 
 .card {
-    width: 350px;
+    width: 100%;
+    max-width: 350px;
     background-color: #efefef;
     border: none;
     cursor: pointer;
@@ -84,13 +86,14 @@ body {
 
 .btn1 {
     height: 40px;
-    width: 150px;
+    width: 100px;
     border: none;
     background-color: #ac40ab;
     color: #aeaeae;
     font-size: 15px;
     border-radius: 6px;
     margin-top: 1.5rem;
+    outline: none;
 }
 
 .text span {
@@ -107,4 +110,10 @@ body {
     background-color: #ccc;
     border-radius: 6px;
     margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .card {
+        width: 350px;
+    }
 }
