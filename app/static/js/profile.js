@@ -17,6 +17,25 @@ async function logoutUser() {
 }
 
 
+async function deleteUser() {
+    const url = "http://127.0.0.1:8000/private/users/deactivate";
+
+    const response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include'
+    });
+
+    if (response.status === 200) {
+        const url = `/pages/login`;
+        window.location.href = url;
+    } else if (response.status === 401) {
+      // Если получен статус 401 (Unauthorized), вызвать функцию обновления пользователя
+      await refreshToken();
+      await logoutUser();
+    }
+}
+
+
 async function getMe() {
     const url = "http://127.0.0.1:8000/private/users/me";
 

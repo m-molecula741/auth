@@ -86,7 +86,7 @@ class UserResponse(ObjSchema):
     email: EmailStr
     name: str
     surname: str
-    description: str
+    description: str = ""
     created_at: str
 
 
