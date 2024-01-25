@@ -20,5 +20,8 @@ async function loginUser() {
   } else if (response.status === 401){
     window.passwordError.showModal()
     console.log("Произошла ошибка:", response.status);
+  } else if (response.status === 410){
+    window.deletedError.showModal()
+    console.log("Аккаунт удален:", response.status);
   }
 }

@@ -53,6 +53,6 @@ async def get_user(
         email=db_user.email,
         name=db_user.name,
         surname=db_user.surname,
-        description=db_user.description,
+        description=db_user.description if db_user.description else "Здесь будет описание",
         created_at=formatted_created_at,
     )

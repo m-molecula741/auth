@@ -118,10 +118,16 @@ class AuthService:
             if db_user.is_active:  # type: ignore
                 return db_user  # type: ignore
             else:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail="User is not activate",
-                )
+                if db_user.is_verified:
+                    raise HTTPException(
+                        status_code=status.HTTP_410_GONE,
+                        detail="account is deleted"
+                    )
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_401_UNAUTHORIZED,
+                        detail="User is not activate",
+                    )
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
