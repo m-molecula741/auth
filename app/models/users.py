@@ -16,15 +16,14 @@ class UserModel(Base):
 
     id: Mapped[py_UUID] = mapped_column(
         UUID(as_uuid=True),
-        primary_key=True,
-        index=True,
+        primary_key=True
     )
     email: Mapped[str] = mapped_column(
         sa.String, nullable=False, unique=True, index=True
     )
     hashed_password: Mapped[str] = mapped_column(sa.String, nullable=False)
-    name: Mapped[str] = mapped_column(sa.String(50), nullable=False)
-    surname: Mapped[str] = mapped_column(sa.String(50), nullable=False)
+    name: Mapped[str] = mapped_column(sa.String(50), nullable=True)
+    surname: Mapped[str] = mapped_column(sa.String(50), nullable=True)
     description: Mapped[str] = mapped_column(sa.String(50), nullable=True)
     image_url: Mapped[str] = mapped_column(sa.String(50), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -35,29 +34,26 @@ class UserModel(Base):
     is_superuser: Mapped[bool] = mapped_column(sa.Boolean, default=False)
 
 
-class UserCreateRequest(ObjSchema):
+class BaseUser(ObjSchema):
     email: EmailStr
-    name: str
-    surname: str
+    name: str | None = None
+    surname: str | None = None
+
+
+class UserCreateRequest(BaseUser):
     password: str
 
 
-class UserCreate(ObjSchema):
+class UserCreate(BaseUser):
     id: py_UUID
-    email: EmailStr
-    name: str
-    surname: str
     hashed_password: str
     is_active: bool = False
     is_verified: bool = False
     is_superuser: bool = False
 
 
-class UserInDb(ObjSchema):
+class UserInDb(BaseUser):
     id: py_UUID
-    email: EmailStr
-    name: str
-    surname: str
     is_active: bool = False
     is_verified: bool = False
     is_superuser: bool = False
@@ -82,11 +78,9 @@ class UserUpdate(BaseUserUpdate):
     hashed_password: str
 
 
-class UserResponse(ObjSchema):
-    email: EmailStr
-    name: str
-    surname: str
-    description: str = ""
+class UserResponse(BaseUser):
+    description: str | None
+    image_url: str | None
     created_at: str
 
 
