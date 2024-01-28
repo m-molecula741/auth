@@ -10,7 +10,6 @@ from app.services.users_service import UserService
 from app.services.auth_service import AuthService
 from app.core.base_schemas import ObjSchema
 from fastapi.responses import ORJSONResponse
-from datetime import datetime
 
 
 router = APIRouter()
@@ -53,6 +52,7 @@ async def get_user(
         email=db_user.email,
         name=db_user.name,
         surname=db_user.surname,
-        description=db_user.description if db_user.description else "Здесь будет описание",
+        description=db_user.description,
+        image_url=db_user.image_url,
         created_at=formatted_created_at,
     )

@@ -2,6 +2,20 @@ version: "3.8"
 name: auth
 
 services:
+   nginx:
+     build:
+       context: .
+       dockerfile: "Dockerfile.nginx"
+     container_name: auth_nginx
+     depends_on:
+       - auth_service
+     ports:
+      - "80:80"
+      - "443:443"
+     networks:
+       - auth
+
+
    auth_service:
      build:
        context: .
@@ -16,8 +30,8 @@ services:
      command: ["./scripts/app.sh"]
      networks:
        - auth
-     ports:
-       - 8000:8000
+#     ports:
+#       - 8000:8000
 
    db_auth:
     image: postgres:15
