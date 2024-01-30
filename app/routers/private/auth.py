@@ -8,7 +8,6 @@ from fastapi import (
 from app.models.users import UserModel
 from app.routers.dependencies import UOWDep, get_current_active_user
 from app.services.auth_service import AuthService
-from app.core.config import config
 from uuid import UUID
 
 router = APIRouter()
