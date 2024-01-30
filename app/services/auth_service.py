@@ -118,7 +118,7 @@ class AuthService:
             if db_user.is_active:  # type: ignore
                 return db_user  # type: ignore
             else:
-                if db_user.is_verified:
+                if db_user.is_verified:  # type: ignore
                     raise HTTPException(
                         status_code=status.HTTP_410_GONE,
                         detail="account is deleted"
