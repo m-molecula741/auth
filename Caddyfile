@@ -1,5 +1,5 @@
-localhost {
+your.domain {
     reverse_proxy auth_service:8000
 
-    tls internal
+    tls your@email.com
 }

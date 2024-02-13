@@ -64,9 +64,9 @@ class Settings(BaseSettings):
     class Config:
         """Путь к файлу .env."""
 
-        env_file = ".env"
+        # env_file = ".env"
         # в случае если запускаю через docker-compose:
-        # env_file = ".env-non-dev"
+        env_file = ".env-non-dev"
 
 
 config = Settings()

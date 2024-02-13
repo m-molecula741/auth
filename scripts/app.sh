@@ -2,4 +2,4 @@
 
 alembic upgrade head
 
-gunicorn app.main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
+uvicorn app.main:app --port=8000 --host=0.0.0.0
