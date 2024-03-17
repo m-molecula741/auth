@@ -12,7 +12,7 @@ async def save_image(file: UploadFile):
         }
 
         response = await client.post(
-            f"{config.tg_domain}/bot{config.bot_token}/sendPhoto", files=form_data
+            f"{config.tg_domain}/bot{config.bot_token}/sendPhoto", files=form_data  # type: ignore
         )
 
     return response
