@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends, Response
+from fastapi import APIRouter, status, Depends, Response, UploadFile, File
 
 from app.models.users import (
     UserUpdateIn,
@@ -10,7 +10,6 @@ from app.services.users_service import UserService
 from app.services.auth_service import AuthService
 from app.core.base_schemas import ObjSchema
 from fastapi.responses import ORJSONResponse
-
 
 router = APIRouter()
 
@@ -50,9 +49,21 @@ async def get_user(
 
     return UserResponse(
         email=db_user.email,
-        name=db_user.name,
-        surname=db_user.surname,
+        nickname=db_user.nickname,
         description=db_user.description,
         image_url=db_user.image_url,
         created_at=formatted_created_at,
     )
+
+
+@router.patch(path="/image", status_code=status.HTTP_200_OK, response_model=str)
+async def upload_image(
+    uow: UOWDep,
+    file: UploadFile = File(...),
+    current_user: UserModel = Depends(get_current_active_user),
+) -> str:
+    """Изменение аватарки пользователя"""
+    image_url = await UserService.upload_image(
+        file=file, user_id=current_user.id, uow=uow
+    )
+    return image_url

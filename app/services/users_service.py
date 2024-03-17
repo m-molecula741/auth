@@ -1,6 +1,8 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, UploadFile
 
+from app.consts import CONTENT_TYPE_IMAGE
 from app.core.base_schemas import ObjSchema
+from app.core.config import config
 from app.db.uow import SqlAlchemyUnitOfWork as UOW
 from app.models.users import (
     UserCreate,
@@ -15,7 +17,9 @@ from app.models.users import (
     UserResendingEmail,
     UserEmail,
     UserPassword,
+    UserImageUpdate,
 )
+from app.utils.telegram_utils import save_image
 from app.utils.users_utils import get_password_hash
 from uuid_extensions import uuid7
 from uuid import UUID
@@ -55,8 +59,7 @@ class UserService:
                 UserCreate(
                     id=uuid7(),
                     email=user.email,
-                    name=user.name,
-                    surname=user.surname,
+                    nickname=f"user_{uuid7()}",
                     hashed_password=get_password_hash(user.password),
                 ),
             )
@@ -108,16 +111,20 @@ class UserService:
                     status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
                 )
 
-            if user.password:
-                user_in = UserUpdate(
-                    **user.dict(exclude_unset=True),
-                    hashed_password=get_password_hash(user.password),
-                )
-            else:
-                user_in = UserUpdate(
-                    **user.dict(exclude_unset=True),
-                    hashed_password=db_user.hashed_password,
-                )
+            if db_user.nickname != user.nickname:
+                user_out, err = await uow.users.find_one(nickname=user.nickname)
+                if user_out:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Данный ник занят",
+                    )
+
+            user_in = UserUpdate(
+                **user.dict(exclude_unset=True),
+                hashed_password=get_password_hash(user.password)
+                if user.password
+                else db_user.hashed_password,
+            )
 
             is_ok, err = await uow.users.update(id=user_id, obj_in=user_in)
             if err:
@@ -217,3 +224,27 @@ class UserService:
                 return True
             else:
                 return False
+
+    @classmethod
+    async def upload_image(cls, file: UploadFile, user_id: UUID, uow: UOW) -> str:
+        if file.content_type not in CONTENT_TYPE_IMAGE:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Only image files are allowed",
+            )
+
+        resp = await save_image(file=file)
+        file_id = resp.json()["result"]["photo"][0]["file_id"]
+        image_url = f"https://{config.domain}/public/users/image?file_id={file_id}"
+
+        async with uow:
+            is_updated, err = await uow.users.update(
+                id=user_id, obj_in=UserImageUpdate(image_url=image_url)
+            )
+            if err:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=err,
+                )
+
+        return image_url

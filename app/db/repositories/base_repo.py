@@ -66,6 +66,7 @@ class BaseRepository(Generic[ModelType]):
         self, id: int | UUID, obj_in: ObjSchema
     ) -> tuple[bool | None, str | None]:
         try:
+            print(obj_in)
             stmt = update(self.model).values(**obj_in.dict()).filter_by(id=id)  # type: ignore
             await self.session.execute(stmt)
         except Exception as e:

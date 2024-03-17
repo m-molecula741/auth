@@ -7,6 +7,7 @@ from fastapi import (
     HTTPException,
 )
 from app.models.auth import Token
+from app.models.users import UserInDb
 from app.routers.dependencies import UOWDep
 from app.services.auth_service import AuthService
 from app.core.base_schemas import ObjSchema
@@ -26,23 +27,20 @@ async def login(
     user = await AuthService.authenticate_user(  # type: ignore
         credentials.username, credentials.password, uow
     )
+    user = UserInDb.from_orm(user)
 
-    token = await AuthService.create_token(user.id, uow)
+    token = await AuthService.create_token(user, uow)
     response.set_cookie(
         "access_token",
         token.access_token,
         max_age=config.access_token_expire_minutes * 60,
-        httponly=True,
         samesite="none",
-        secure=True
     )
     response.set_cookie(
         "refresh_token",
         token.refresh_token,
         max_age=config.refresh_token_expire_days * 30 * 24 * 60,
-        httponly=True,
         samesite="none",
-        secure=True
     )
 
     return token

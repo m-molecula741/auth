@@ -1,5 +1,7 @@
+import io
+
 from fastapi import APIRouter, status, Depends
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import ORJSONResponse, StreamingResponse
 
 from app.models.users import (
     UserCreateRequest,
@@ -14,6 +16,7 @@ from app.services.users_service import UserService
 from app.core.base_schemas import ObjSchema
 from redis.asyncio import Redis
 
+from app.utils.telegram_utils import get_image_info, get_image
 
 router = APIRouter()
 
@@ -69,3 +72,15 @@ async def verification_and_activation(
 ) -> ORJSONResponse:
     is_ok = await UserService.confirm_activate(code, uow, redis)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
+
+
+@router.get(path="/image", status_code=status.HTTP_200_OK)
+async def get_user_image(
+    file_id: str,
+) -> StreamingResponse:
+    """Получение аватарки пользователя"""
+    file_info = await get_image_info(file_id=file_id)
+    print(file_info.json())
+    file = await get_image(file_path=file_info.json()["result"]["file_path"])
+
+    return StreamingResponse(content=io.BytesIO(file.content), media_type="image/jpeg")

@@ -14,18 +14,14 @@ from datetime import datetime
 class UserModel(Base):
     __tablename__ = "user"
 
-    id: Mapped[py_UUID] = mapped_column(
-        UUID(as_uuid=True),
-        primary_key=True
-    )
+    id: Mapped[py_UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     email: Mapped[str] = mapped_column(
         sa.String, nullable=False, unique=True, index=True
     )
     hashed_password: Mapped[str] = mapped_column(sa.String, nullable=False)
-    name: Mapped[str] = mapped_column(sa.String(50), nullable=True)
-    surname: Mapped[str] = mapped_column(sa.String(50), nullable=True)
-    description: Mapped[str] = mapped_column(sa.String(50), nullable=True)
-    image_url: Mapped[str] = mapped_column(sa.String(50), nullable=True)
+    nickname: Mapped[str] = mapped_column(sa.String(50), unique=True, nullable=False)
+    description: Mapped[str] = mapped_column(sa.String(150), nullable=True)
+    image_url: Mapped[str] = mapped_column(sa.String(300), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         sa.DateTime, default=datetime.utcnow, nullable=False
     )
@@ -36,8 +32,6 @@ class UserModel(Base):
 
 class BaseUser(ObjSchema):
     email: EmailStr
-    name: str | None = None
-    surname: str | None = None
 
 
 class UserCreateRequest(BaseUser):
@@ -46,6 +40,7 @@ class UserCreateRequest(BaseUser):
 
 class UserCreate(BaseUser):
     id: py_UUID
+    nickname: str
     hashed_password: str
     is_active: bool = False
     is_verified: bool = False
@@ -54,6 +49,7 @@ class UserCreate(BaseUser):
 
 class UserInDb(BaseUser):
     id: py_UUID
+    nickname: str
     is_active: bool = False
     is_verified: bool = False
     is_superuser: bool = False
@@ -64,8 +60,7 @@ class UserDeactivate(ObjSchema):
 
 
 class BaseUserUpdate(ObjSchema):
-    name: str | None = None
-    surname: str | None = None
+    nickname: str
     description: str | None = None
 
 
@@ -79,6 +74,7 @@ class UserUpdate(BaseUserUpdate):
 
 
 class UserResponse(BaseUser):
+    nickname: str
     description: str | None
     image_url: str | None
     created_at: str
@@ -104,3 +100,7 @@ class UserEmail(ObjSchema):
 
 class UserPassword(ObjSchema):
     hashed_password: str
+
+
+class UserImageUpdate(ObjSchema):
+    image_url: str

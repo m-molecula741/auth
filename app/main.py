@@ -9,8 +9,10 @@ from app.core.logger import logger
 from app.core.middleware import add_process_time_handler
 from app.routers.routers import router_private, router_public
 from redis import asyncio as aioredis
+
 # from app.pages.router import router as router_pages
 from fastapi.middleware.cors import CORSMiddleware
+
 # from fastapi.staticfiles import StaticFiles
 
 
@@ -22,7 +24,7 @@ def get_app() -> FastAPI:
         default_response_class=ORJSONResponse,
     )
 
-    origins = ['*']
+    origins = ["*"]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,

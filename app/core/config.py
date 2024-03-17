@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     domain: str
+    bot_token: str = Field(default="")
+    chat_id: str = Field(default="")
+    tg_domain: str = Field(default="https://api.telegram.org")
 
     smtp_host: str
     smtp_port: int
@@ -64,9 +67,9 @@ class Settings(BaseSettings):
     class Config:
         """Путь к файлу .env."""
 
-        # env_file = ".env"
+        env_file = ".env"
         # в случае если запускаю через docker-compose:
-        env_file = ".env-non-dev"
+        # env_file = ".env-non-dev"
 
 
 config = Settings()
