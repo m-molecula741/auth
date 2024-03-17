@@ -1,5 +1,5 @@
 [flake8]
-ignore = ANN101, ANN002, ANN003, A003, D400, ANN401
+ignore = ANN101, ANN002, ANN003, A003, D400, ANN401, W503
 ; A003 class attribute "..." is shadowing a python builtin
 ; ANN101 Missing type annotation for self in method
 ; ANN002 Missing type annotation for *args
