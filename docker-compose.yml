@@ -35,7 +35,7 @@ services:
        dockerfile: Dockerfile
      container_name: auth_service
      env_file:
-       - .env-non-dev
+       - .env
      depends_on:
        - db_auth
        - redis_auth

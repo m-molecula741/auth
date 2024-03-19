@@ -1,5 +1,5 @@
-your.domain {
+{$DOMAIN:localhost} {
     reverse_proxy auth_service:8000
 
-    tls your@email.com
+    tls {$SMTP_CADDY_USER}
 }

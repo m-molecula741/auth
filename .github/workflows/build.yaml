@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOMAIN: ${{ env.domain }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and run Docker Compose
+        run: |
+          docker-compose build
+          docker-compose up
+
+      - name: Stop Docker Compose
+        run: docker-compose down
