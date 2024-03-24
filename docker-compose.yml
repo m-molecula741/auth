@@ -1,9 +1,12 @@
 version: "3.8"
+name: auth
 
 services:
    caddy:
      image: caddy:latest
      container_name: auth_caddy
+     env_file:
+       - .env
      ports:
       - "80:80"
       - "443:443"
