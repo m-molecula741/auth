@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOMAIN: ${{ env.domain }}
+      DOMAIN: ${{ env.DOMAIN }}
       SMTP_CADDY_USER: ${{ secrets.SMTP_CADDY_USER }}
 
     steps:
