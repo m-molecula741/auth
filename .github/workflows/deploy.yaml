@@ -23,6 +23,6 @@ jobs:
 
       - name: Restart Docker Container
         run: |
-          ssh ${{ secrets.SSH_UP }} 'docker-compose -f /root/project/docker-compose.yml down'
-          ssh ${{ secrets.SSH_UP }} 'docker-compose -f /root/project/docker-compose.yml build'
-          ssh ${{ secrets.SSH_UP }} 'docker-compose -f /root/project/docker-compose.yml up -d'
+          ssh ${{ secrets.SSH_UP }} 'docker compose -f /root/project/docker-compose.yml down'
+          ssh ${{ secrets.SSH_UP }} 'docker compose -f /root/project/docker-compose.yml build'
+          ssh ${{ secrets.SSH_UP }} 'docker compose -f /root/project/docker-compose.yml up -d'
