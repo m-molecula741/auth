@@ -54,7 +54,7 @@ services:
     ports:
       - "5432:5432"
     env_file:
-      - .env-non-dev
+      - .env
     networks:
       - auth
     # restart: unless-stopped
@@ -73,7 +73,7 @@ services:
      # command: [ "./scripts/celery.sh", "celery_app" ]
      command: sh -c "celery --app=app.tasks.celery_app:celery_app worker -l INFO"
      env_file:
-       - .env-non-dev
+       - .env
      depends_on:
        - redis_auth
      networks:
