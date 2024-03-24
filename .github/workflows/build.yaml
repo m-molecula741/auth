@@ -1,4 +1,4 @@
-name: Build
+name: Build Check
 
 on:
   push:
@@ -14,6 +14,7 @@ jobs:
 
     env:
       DOMAIN: ${{ env.domain }}
+      SMTP_CADDY_USER: ${{ env.smtp_caddy_user }}
 
     steps:
       - name: Checkout code
