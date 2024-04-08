@@ -42,7 +42,7 @@ services:
        - db_auth
        - redis_auth
        - celery_auth
-     command: ["./scripts/app.sh"]
+     command: ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --port=8000 --host=0.0.0.0"]
      networks:
        - auth
 #     ports:

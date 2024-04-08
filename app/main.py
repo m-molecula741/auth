@@ -24,7 +24,7 @@ def get_app() -> FastAPI:
         default_response_class=ORJSONResponse,
     )
 
-    origins = ["*"]
+    origins = [config.front_origin]
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
