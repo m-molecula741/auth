@@ -24,6 +24,7 @@ async def login(
     response: Response,
     credentials: OAuth2PasswordRequestForm = Depends(),
 ) -> ObjSchema:
+    """Вход"""
     user = await AuthService.authenticate_user(  # type: ignore
         credentials.username, credentials.password, uow
     )
@@ -35,12 +36,16 @@ async def login(
         token.access_token,
         max_age=config.access_token_expire_minutes * 60,
         samesite="none",
+        httponly=True,
+        secure=True,
     )
     response.set_cookie(
         "refresh_token",
         token.refresh_token,
         max_age=config.refresh_token_expire_days * 30 * 24 * 60,
         samesite="none",
+        httponly=True,
+        secure=True,
     )
 
     return token
@@ -52,6 +57,7 @@ async def refresh_token(
     request: Request,
     response: Response,
 ) -> ObjSchema:
+    """Обновление токенов"""
     if not request.cookies.get("refresh_token"):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="no refresh token"
@@ -64,12 +70,16 @@ async def refresh_token(
         "access_token",
         new_token.access_token,
         max_age=config.access_token_expire_minutes * 60,
-        httponly=False,
+        httponly=True,
+        samesite="none",
+        secure=True,
     )
     response.set_cookie(
         "refresh_token",
         new_token.refresh_token,
         max_age=config.refresh_token_expire_days * 30 * 24 * 60,
         httponly=True,
+        samesite="none",
+        secure=True,
     )
     return new_token

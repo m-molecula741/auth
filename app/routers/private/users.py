@@ -20,6 +20,7 @@ async def deactivate_user(
     uow: UOWDep,
     current_user: UserModel = Depends(get_current_active_user),
 ) -> dict:
+    """Удалить аккаунт"""
     response.delete_cookie("access_token")
     response.delete_cookie("refresh_token")
     await AuthService.abort_all_sessions(current_user.id, uow)
@@ -33,6 +34,7 @@ async def update_user(
     uow: UOWDep,
     current_user: UserModel = Depends(get_current_active_user),
 ) -> ORJSONResponse:
+    """Изменить данные профиля"""
     is_ok = await UserService.update_user(current_user.id, user_in, uow)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
 
@@ -42,6 +44,7 @@ async def get_user(
     uow: UOWDep,
     current_user: UserModel = Depends(get_current_active_user),
 ) -> ObjSchema:
+    """Получить свои данные"""
     db_user = await UserService.get_user(current_user.id, uow)
     created_at_datetime = db_user.created_at
     # Преобразовать формат datetime в формат "день месяц год"

@@ -27,6 +27,7 @@ router = APIRouter()
 async def create_user(
     user: UserCreateRequest, uow: UOWDep, redis: Redis = Depends(get_redis)
 ) -> ObjSchema:
+    """Регистрация пользователя"""
     return await UserService.register_new_user(uow, user, redis)
 
 
@@ -36,6 +37,7 @@ async def create_user(
 async def verification_and_activation_user(
     code: UserVerifyEmail, uow: UOWDep, redis: Redis = Depends(get_redis)
 ) -> ORJSONResponse:
+    """Подтверждение регистрации"""
     is_ok = await UserService.verify_email_and_activate_user(code, uow, redis)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
 
@@ -44,6 +46,7 @@ async def verification_and_activation_user(
 async def resending_email_to_user(
     resending_data: UserResendingEmail, redis: Redis = Depends(get_redis)
 ) -> ORJSONResponse:
+    """Повторная отправка кода на почту"""
     await UserService.resending_email(resending_data, redis)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=True)
 
@@ -52,6 +55,7 @@ async def resending_email_to_user(
     path="/password/reset", status_code=status.HTTP_200_OK, response_model=bool
 )
 async def reset_password(reset_data: UserEmail, uow: UOWDep) -> ORJSONResponse:
+    """Сброс пароля"""
     await UserService.reset_password_and_send_new(reset_data, uow)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=True)
 
@@ -60,6 +64,7 @@ async def reset_password(reset_data: UserEmail, uow: UOWDep) -> ORJSONResponse:
 async def activate_user(
     user_data: UserEmail, uow: UOWDep, redis: Redis = Depends(get_redis)
 ) -> ORJSONResponse:
+    """Активация пользователя"""
     await UserService.activate_user(user_data, uow, redis)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=True)
 
@@ -70,6 +75,7 @@ async def activate_user(
 async def verification_and_activation(
     code: UserVerifyEmail, uow: UOWDep, redis: Redis = Depends(get_redis)
 ) -> ORJSONResponse:
+    """Подтверждение активации"""
     is_ok = await UserService.confirm_activate(code, uow, redis)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
 

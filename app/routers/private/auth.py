@@ -20,8 +20,9 @@ async def logout(
     response: Response,
     user: UserModel = Depends(get_current_active_user),
 ) -> dict:
-    response.delete_cookie("access_token", httponly=True)
-    response.delete_cookie("refresh_token", httponly=True)
+    """Ручка Выхода"""
+    response.delete_cookie("access_token", httponly=True, samesite="none", secure=True)
+    response.delete_cookie("refresh_token", httponly=True, samesite="none", secure=True)
 
     await AuthService.logout(UUID(request.cookies.get("refresh_token")), uow)
     content = {"message": "Logged out successfully"}

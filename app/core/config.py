@@ -35,6 +35,8 @@ class Settings(BaseSettings):
     chat_id: str = Field(default="")
     tg_domain: str = Field(default="https://api.telegram.org")
 
+    front_origin: str = Field(default="localhost:8000")
+
     smtp_host: str
     smtp_port: int
     smtp_user: str
@@ -68,8 +70,6 @@ class Settings(BaseSettings):
         """Путь к файлу .env."""
 
         env_file = ".env"
-        # в случае если запускаю через docker-compose:
-        # env_file = ".env-non-dev"
 
 
 config = Settings()

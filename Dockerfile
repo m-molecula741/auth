@@ -17,5 +17,3 @@ RUN poetry install --no-root --no-interaction --no-ansi
 EXPOSE 8000
 
 COPY . .
-
-RUN chmod a+x /app/scripts/*.sh
