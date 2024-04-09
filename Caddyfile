@@ -1,5 +1,16 @@
-{$DOMAIN:localhost} {
-    reverse_proxy auth_service:8000
+{$DOMAIN}:localhost {
+
+    # Проксирование запросов к сервису auth_service на пути /auth
+    @authService {
+        path /auth/*
+    }
+    reverse_proxy @authService auth_service:8000
+
+    # Проксирование запросов к другому сервису на пути /konspect
+    @konspectService {
+        path /konspect/*
+    }
+    reverse_proxy @konspectService konspect_service:7000
 
     tls {$SMTP_CADDY_USER}
 }
