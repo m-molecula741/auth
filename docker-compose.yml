@@ -17,6 +17,7 @@ services:
       - auth_service
      networks:
       - auth
+      - front_some-net
 
 #   nginx:
 #     build:
@@ -83,3 +84,5 @@ networks:
    auth:
     name: auth
     driver: bridge
+   front_some-net:
+    external: true
