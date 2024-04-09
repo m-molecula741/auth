@@ -1,4 +1,4 @@
-{$DOMAIN}:localhost {
+{$DOMAIN:localhost} {
 
     # Проксирование запросов к сервису auth_service на пути /auth
     @authService {
