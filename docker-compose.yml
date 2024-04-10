@@ -2,34 +2,21 @@ version: "3.8"
 name: auth
 
 services:
-   caddy:
-     image: caddy:latest
-     container_name: auth_caddy
-     env_file:
-       - .env
-     ports:
-      - "80:80"
-      - "443:443"
-     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./certs:/caddy/certs
-     depends_on:
-      - auth_service
-     networks:
-      - auth
-
-#   nginx:
-#     build:
-#       context: .
-#       dockerfile: "Dockerfile.nginx"
-#     container_name: auth_nginx
-#     depends_on:
-#       - auth_service
-#     ports:
-#      - "80:80"
-#      - "443:443"
-#     networks:
-#       - auth
+#  caddy:
+  #    image: caddy:latest
+  #    container_name: auth_caddy
+  #    env_file:
+  #      - .env
+  #    ports:
+  #     - "80:80"
+  #     - "443:443"
+  #    volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - ./certs:/caddy/certs
+  #    depends_on:
+  #     - auth_service
+  #    networks:
+  #     - auth
 
    auth_service:
      build:
@@ -45,8 +32,8 @@ services:
      command: ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --port=8000 --host=0.0.0.0"]
      networks:
        - auth
-#     ports:
-#       - 8000:8000
+     ports:
+       - 8000:8000
 
    db_auth:
     image: postgres:15
