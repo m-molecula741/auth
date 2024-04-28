@@ -9,8 +9,8 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.core.config import config as app_config
 from app.db.database import Base
-from app.models.users import UserModel
 from app.models.auth import AuthModel
+from app.models.users import UserModel
 
 config = getattr(context, "config")
 

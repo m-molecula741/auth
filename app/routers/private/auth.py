@@ -1,14 +1,10 @@
-from fastapi import (
-    APIRouter,
-    status,
-    Response,
-    Request,
-    Depends,
-)
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, Request, Response, status
+
 from app.models.users import UserModel
 from app.routers.dependencies import UOWDep, get_current_active_user
 from app.services.auth_service import AuthService
-from uuid import UUID
 
 router = APIRouter()
 

@@ -1,1 +1,1 @@
-from app.models import users, auth  # type: ignore
+from app.models import auth, users  # type: ignore

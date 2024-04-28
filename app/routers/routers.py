@@ -1,14 +1,7 @@
 from fastapi import APIRouter
 
-from app.routers.private import (
-    users as private_users,
-    auth as private_auth,
-)
-from app.routers.public import (
-    auth as public_auth,
-    users as public_users,
-)
-
+from app.routers.private import auth as private_auth, users as private_users
+from app.routers.public import auth as public_auth, users as public_users
 
 router_public = APIRouter()
 router_public.include_router(

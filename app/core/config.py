@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     redis_port: int = Field(default=6379)
 
     redis_cache_time: int = Field(default=600)
-    access_token_expire_minutes: int = 15
+    access_token_expire_minutes: int = 45
     refresh_token_expire_days: int = 30
     secret_key: str
     algorithm: str
@@ -35,7 +35,7 @@ class Settings(BaseSettings):
     chat_id: str = Field(default="")
     tg_domain: str = Field(default="https://api.telegram.org")
 
-    front_origin: str = Field(default="localhost:8000")
+    front_origin: str = Field(default="localhost:3000")
 
     smtp_host: str
     smtp_port: int

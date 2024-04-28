@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+from datetime import datetime
+from uuid import UUID as py_UUID
+
 import sqlalchemy as sa
+from fastapi import HTTPException
+from humps import decamelize
+from pydantic import EmailStr, validator
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.core.base_schemas import ObjSchema
+from app.core.base_schemas import ObjSchema, PaginatedResponse, PaginationSchema
 from app.db.database import Base
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import UUID as py_UUID
-from pydantic import EmailStr
-from datetime import datetime
 
 
 class UserModel(Base):
@@ -74,10 +77,12 @@ class UserUpdate(BaseUserUpdate):
 
 
 class UserResponse(BaseUser):
+    id: py_UUID
     nickname: str
     description: str | None
     image_url: str | None
-    created_at: str
+    created_at: datetime
+    is_superuser: bool = False
 
 
 class UserVerifyEmail(ObjSchema):
@@ -104,3 +109,22 @@ class UserPassword(ObjSchema):
 
 class UserImageUpdate(ObjSchema):
     image_url: str
+
+
+class QueryUsers(PaginationSchema):
+    nickname: str | None = None
+
+    @validator("sort_by")
+    def verify_sort_by(cls, value: str) -> str:  # noqa: N805
+        """Проверка формата поля, по которому сортируется список."""
+        if value is not None:
+            value = decamelize(value)
+            if value not in UserModel.__table__.columns:
+                raise HTTPException(
+                    status_code=422, detail={"sortBy": "Неверное значение"}
+                )
+        return value
+
+
+class UsersResponse(PaginatedResponse):
+    result: list[UserResponse]
