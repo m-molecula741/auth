@@ -101,7 +101,7 @@ async def get_users(uow: UOWDep, query: QueryUsers = Depends()) -> UsersResponse
     return users_resp
 
 
-@router.get(path="", status_code=status.HTTP_200_OK, response_model=UserResponse)
+@router.get(path="/{user_id}", status_code=status.HTTP_200_OK, response_model=UserResponse)
 async def get_user_by_id(uow: UOWDep, user_id: UUID) -> UserResponse:
     """Получение пользователя по id"""
     async with uow:
