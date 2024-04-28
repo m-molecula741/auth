@@ -1,14 +1,15 @@
 from __future__ import annotations
 
+from datetime import datetime
+from uuid import UUID as py_UUID
+
 import sqlalchemy as sa
 from pydantic import Field
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.base_schemas import ObjSchema
 from app.db.database import Base
-from sqlalchemy.dialects.postgresql import UUID
-from uuid import UUID as py_UUID
-from datetime import datetime
 
 
 class AuthModel(Base):

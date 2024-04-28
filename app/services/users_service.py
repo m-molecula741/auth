@@ -1,36 +1,40 @@
-from fastapi import HTTPException, status, UploadFile
+import json
+import random
+from uuid import UUID
+
+from fastapi import HTTPException, UploadFile, status
+from uuid_extensions import uuid7
 
 from app.consts import CONTENT_TYPE_IMAGE
 from app.core.base_schemas import ObjSchema
 from app.core.config import config
 from app.db.uow import SqlAlchemyUnitOfWork as UOW
 from app.models.users import (
+    ActivateUser,
+    QueryUsers,
     UserCreate,
     UserCreateRequest,
-    UserInDb,
     UserDeactivate,
-    UserModel,
-    UserUpdateIn,
-    UserUpdate,
-    UserVerifyEmail,
-    ActivateUser,
-    UserResendingEmail,
     UserEmail,
-    UserPassword,
     UserImageUpdate,
+    UserInDb,
+    UserModel,
+    UserPassword,
+    UserResendingEmail,
+    UserResponse,
+    UsersResponse,
+    UserUpdate,
+    UserUpdateIn,
+    UserVerifyEmail,
+)
+from app.tasks.tasks import (
+    send_activate_code_by_email,
+    send_new_password_by_email,
+    send_register_confirmation_email,
 )
 from app.utils.telegram_utils import save_image
 from app.utils.users_utils import get_password_hash
-from uuid_extensions import uuid7
-from uuid import UUID
-import random
-from app.tasks.tasks import (
-    send_register_confirmation_email,
-    send_new_password_by_email,
-    send_activate_code_by_email,
-)
 from redis.asyncio import Redis
-import json
 
 
 class UserService:
@@ -235,7 +239,7 @@ class UserService:
 
         resp = await save_image(file=file)
         file_id = resp.json()["result"]["photo"][0]["file_id"]
-        image_url = f"https://{config.domain}/public/users/image?file_id={file_id}"
+        image_url = f"https://{config.domain}/api/public/users/image?file_id={file_id}"
 
         async with uow:
             is_updated, err = await uow.users.update(
@@ -248,3 +252,20 @@ class UserService:
                 )
 
         return image_url
+
+    @classmethod
+    async def get_users(cls, uow: UOW, query: QueryUsers) -> UsersResponse:
+        async with uow:
+            users, count, err = await uow.users.get_users(query=query)
+            if err:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
+
+            pages, page_size = UsersResponse.get_pages(
+                count=count, page_size=query.page_size
+            )
+
+            users = [UserResponse.from_orm(user) for user in users]  # type: ignore
+
+        return UsersResponse(
+            count=count, pages=pages, page_size=page_size, result=users
+        )

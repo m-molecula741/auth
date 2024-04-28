@@ -1,15 +1,11 @@
-from fastapi import APIRouter, status, Depends, Response, UploadFile, File
-
-from app.models.users import (
-    UserUpdateIn,
-    UserResponse,
-    UserModel,
-)
-from app.routers.dependencies import UOWDep, get_current_active_user
-from app.services.users_service import UserService
-from app.services.auth_service import AuthService
-from app.core.base_schemas import ObjSchema
+from fastapi import APIRouter, Depends, File, Response, UploadFile, status
 from fastapi.responses import ORJSONResponse
+
+from app.core.base_schemas import ObjSchema
+from app.models.users import UserModel, UserResponse, UserUpdateIn
+from app.routers.dependencies import UOWDep, get_current_active_user
+from app.services.auth_service import AuthService
+from app.services.users_service import UserService
 
 router = APIRouter()
 
@@ -46,17 +42,7 @@ async def get_user(
 ) -> ObjSchema:
     """Получить свои данные"""
     db_user = await UserService.get_user(current_user.id, uow)
-    created_at_datetime = db_user.created_at
-    # Преобразовать формат datetime в формат "день месяц год"
-    formatted_created_at = created_at_datetime.strftime("%d %B %Y")
-
-    return UserResponse(
-        email=db_user.email,
-        nickname=db_user.nickname,
-        description=db_user.description,
-        image_url=db_user.image_url,
-        created_at=formatted_created_at,
-    )
+    return UserResponse.from_orm(db_user)
 
 
 @router.patch(path="/image", status_code=status.HTTP_200_OK, response_model=str)

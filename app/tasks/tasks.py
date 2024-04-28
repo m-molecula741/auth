@@ -1,12 +1,14 @@
-from app.tasks.celery_app import celery_app
+import smtplib
+
 from pydantic import EmailStr
+
+from app.core.config import config
+from app.tasks.celery_app import celery_app
 from app.tasks.email_templates import (
     create_register_confirmation_template,
-    sending_new_password_template,
     sending_activate_code_template,
+    sending_new_password_template,
 )
-import smtplib
-from app.core.config import config
 
 
 @celery_app.task

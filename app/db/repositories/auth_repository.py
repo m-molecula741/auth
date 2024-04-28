@@ -1,9 +1,11 @@
+from uuid import UUID
+
+from sqlalchemy import select
+from sqlalchemy.sql.expression import delete
+
+from app.core.logger import logger
 from app.db.repositories.base_repo import BaseRepository, ModelType
 from app.models.auth import AuthModel
-from app.core.logger import logger
-from sqlalchemy.sql.expression import delete
-from uuid import UUID
-from sqlalchemy import select
 
 
 class AuthRepository(BaseRepository[AuthModel]):

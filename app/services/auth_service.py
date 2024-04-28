@@ -1,16 +1,16 @@
-from fastapi import HTTPException, status
+from datetime import datetime, timedelta, timezone
+from uuid import UUID
 
+from fastapi import HTTPException, status
+from jose import jwt
+from uuid_extensions import uuid7
+
+from app.core.config import config
 from app.db.repositories.base_repo import ModelType
 from app.db.uow import SqlAlchemyUnitOfWork as UOW
-from app.models.auth import Token
-from uuid import UUID
-from datetime import datetime, timedelta, timezone
-from uuid_extensions import uuid7
-from app.core.config import config
-from jose import jwt
-from app.models.auth import AuthSessionCreate, AuthSessionUpdate
+from app.models.auth import AuthSessionCreate, AuthSessionUpdate, Token
 from app.models.users import UserInDb
-from app.utils.users_utils import is_valid_password, is_email
+from app.utils.users_utils import is_email, is_valid_password
 
 
 class AuthService:

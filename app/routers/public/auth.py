@@ -1,19 +1,14 @@
-from fastapi import (
-    APIRouter,
-    status,
-    Response,
-    Request,
-    Depends,
-    HTTPException,
-)
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi.security import OAuth2PasswordRequestForm
+
+from app.core.base_schemas import ObjSchema
+from app.core.config import config
 from app.models.auth import Token
 from app.models.users import UserInDb
 from app.routers.dependencies import UOWDep
 from app.services.auth_service import AuthService
-from app.core.base_schemas import ObjSchema
-from fastapi.security import OAuth2PasswordRequestForm
-from app.core.config import config
-from uuid import UUID
 
 router = APIRouter()
 

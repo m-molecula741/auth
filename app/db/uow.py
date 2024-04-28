@@ -4,11 +4,12 @@ from abc import ABC, abstractmethod
 from types import TracebackType
 from typing import Type
 
-from app.db.database import async_session_maker
-from app.db.repositories import users_repository, auth_repository
-from pydantic import ValidationError
 from fastapi import HTTPException, status
+from pydantic import ValidationError
+
 from app.core.logger import logger
+from app.db.database import async_session_maker
+from app.db.repositories import auth_repository, users_repository
 
 
 class AbstractUOW(ABC):

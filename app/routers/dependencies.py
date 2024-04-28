@@ -1,14 +1,14 @@
-from typing import Annotated
-from app.db.uow import SqlAlchemyUnitOfWork as UOW
 import uuid
+from typing import Annotated
+
 from fastapi import Depends, HTTPException, status
 from jose import jwt
 
 from app.core.config import config
+from app.db.uow import SqlAlchemyUnitOfWork as UOW
 from app.models.users import UserModel
 from app.services.users_service import UserService
 from app.utils.users_utils import OAuth2PasswordBearerWithCookie
-
 
 oauth2_scheme = OAuth2PasswordBearerWithCookie(token_url="/pages/profile")
 
