@@ -238,7 +238,7 @@ class UserService:
             )
 
         resp = await save_image(file=file)
-        file_id = resp.json()["result"]["photo"][0]["file_id"]
+        file_id = resp.json()["result"]["photo"][1]["file_id"]
         image_url = f"https://{config.domain}/api/public/users/image?file_id={file_id}"
 
         async with uow:
