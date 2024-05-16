@@ -264,7 +264,9 @@ class UserService:
                 count=count, page_size=query.page_size
             )
 
-            users = [UserResponse.from_orm(user) for user in users]  # type: ignore
+        users = [UserResponse.from_orm(user) for user in users]  # type: ignore
+        for user in users:
+            user.email = "***@mail.ru"
 
         return UsersResponse(
             count=count, pages=pages, page_size=page_size, result=users
