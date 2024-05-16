@@ -108,4 +108,5 @@ async def get_user_by_id(uow: UOWDep, user_id: UUID) -> UserResponse:
         user_resp, err = await uow.users.find_one(id=user_id)
         if err:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
+    user_resp.email = "***@mail.ru"  # type: ignore
     return UserResponse.from_orm(user_resp)
