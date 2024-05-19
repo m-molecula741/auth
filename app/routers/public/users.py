@@ -42,6 +42,10 @@ async def verification_and_activation_user(
 ) -> ORJSONResponse:
     """Подтверждение регистрации"""
     is_ok = await UserService.verify_email_and_activate_user(code, uow, redis)
+    if not is_ok:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный код подтверждения"
+        )
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
 
 
@@ -80,6 +84,10 @@ async def verification_and_activation(
 ) -> ORJSONResponse:
     """Подтверждение активации"""
     is_ok = await UserService.confirm_activate(code, uow, redis)
+    if not is_ok:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Неверный код подтверждения"
+        )
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
 
 
@@ -101,7 +109,9 @@ async def get_users(uow: UOWDep, query: QueryUsers = Depends()) -> UsersResponse
     return users_resp
 
 
-@router.get(path="/{user_id}", status_code=status.HTTP_200_OK, response_model=UserResponse)
+@router.get(
+    path="/{user_id}", status_code=status.HTTP_200_OK, response_model=UserResponse
+)
 async def get_user_by_id(uow: UOWDep, user_id: UUID) -> UserResponse:
     """Получение пользователя по id"""
     async with uow:
