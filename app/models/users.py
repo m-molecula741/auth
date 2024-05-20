@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from datetime import datetime
 from uuid import UUID as py_UUID
+import re
 
 import sqlalchemy as sa
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from humps import decamelize
 from pydantic import EmailStr, validator
 from sqlalchemy.dialects.postgresql import UUID
@@ -39,6 +40,20 @@ class BaseUser(ObjSchema):
 
 class UserCreateRequest(BaseUser):
     password: str
+
+    @validator("password")
+    def password_validation(cls, v):
+        pattern = r'^(?=.*[0-9])(?=.*[!@#$_%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#_$%^&*]{8,}$'
+        if not re.match(pattern, v):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Пароль должен быть длиннее 8 символов, "
+                "содержать латинский заглавный и строчный символ, "
+                "цифры, "
+                "а также специальный символ"
+            )
+
+        return v
 
 
 class UserCreate(BaseUser):
