@@ -20,6 +20,7 @@ aiofiles = "^22.1.0"
 sentry-sdk = { extras = ["fastapi"], version = "^1.10.1" }
 python-multipart = "^0.0.5"
 celery = { extras = ["redis"], version = "^5.2.7" }
+bcrypt = "^3.2.2"
 passlib = {version="^1.7.4", extras=["bcrypt"]}
 pendulum = "^2.1.2"
 anyio = "^3.6.2"

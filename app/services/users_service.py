@@ -34,7 +34,7 @@ from app.tasks.tasks import (
     send_register_confirmation_email,
 )
 from app.utils.telegram_utils import save_image
-from app.utils.users_utils import get_password_hash
+from app.utils.users_utils import get_password_hash, is_valid_password
 from redis.asyncio import Redis
 
 
@@ -283,7 +283,9 @@ class UserService:
                     status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
                 )
 
-            if db_user.hashed_password != get_password_hash(password_data.old_password):
+            if not is_valid_password(
+                password_data.old_password, db_user.hashed_password
+            ):
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Неверный старый пароль",
@@ -291,7 +293,9 @@ class UserService:
 
             is_ok, err = await uow.users.update(
                 id=user_id,
-                obj_in=UserPassword(get_password_hash(password_data.new_password)),
+                obj_in=UserPassword(
+                    hashed_password=get_password_hash(password_data.new_password)
+                ),
             )
             if err:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
