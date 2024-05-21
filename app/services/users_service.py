@@ -20,6 +20,7 @@ from app.models.users import (
     UserInDb,
     UserModel,
     UserPassword,
+    UserPasswordUpdate,
     UserResendingEmail,
     UserResponse,
     UsersResponse,
@@ -43,7 +44,7 @@ class UserService:
         cls, uow: UOW, user: UserCreateRequest, redis: Redis
     ) -> ObjSchema:
         async with uow:
-            user_exist, err = await uow.users.find_user(email=user.email)
+            user_exist, err = await uow.users.find_user(email=user.email.lower())
             if err:
                 raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
             elif user_exist:
@@ -62,7 +63,7 @@ class UserService:
             db_user, err = await uow.users.add(
                 UserCreate(
                     id=uuid7(),
-                    email=user.email,
+                    email=user.email.lower(),
                     nickname=f"user_{uuid7()}",
                     hashed_password=get_password_hash(user.password),
                 ),
@@ -125,9 +126,6 @@ class UserService:
 
             user_in = UserUpdate(
                 **user.dict(exclude_unset=True),
-                hashed_password=get_password_hash(user.password)
-                if user.password
-                else db_user.hashed_password,
             )
 
             is_ok, err = await uow.users.update(id=user_id, obj_in=user_in)
@@ -271,3 +269,31 @@ class UserService:
         return UsersResponse(
             count=count, pages=pages, page_size=page_size, result=users
         )
+
+    @classmethod
+    async def update_password(
+        cls, user_id: UUID, password_data: UserPasswordUpdate, uow: UOW
+    ) -> bool:
+        async with uow:
+            db_user, err = await uow.users.find_user(id=user_id)
+            if err:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
+            if db_user is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+                )
+
+            if db_user.hashed_password != get_password_hash(password_data.old_password):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Неверный старый пароль",
+                )
+
+            is_ok, err = await uow.users.update(
+                id=user_id,
+                obj_in=UserPassword(get_password_hash(password_data.new_password)),
+            )
+            if err:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
+
+        return is_ok

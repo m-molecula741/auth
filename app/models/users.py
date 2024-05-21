@@ -43,14 +43,13 @@ class UserCreateRequest(BaseUser):
 
     @validator("password")
     def password_validation(cls, v):
-        pattern = r'^(?=.*[0-9])(?=.*[!@#$_%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#_$%^&*]{8,}$'
+        pattern = r"^(?=.*[a-zа-яё])(?=.*[A-ZА-ЯЁ])(?=.*\d).{8,}$"
         if not re.match(pattern, v):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Пароль должен быть длиннее 8 символов, "
                 "содержать латинский заглавный и строчный символ, "
-                "цифры, "
-                "а также специальный символ"
+                "а также цифру",
             )
 
         return v
@@ -83,12 +82,30 @@ class BaseUserUpdate(ObjSchema):
 
 
 class UserUpdateIn(BaseUserUpdate):
-    password: str | None = None
+    pass
 
 
 class UserUpdate(BaseUserUpdate):
     is_active: bool = True
     hashed_password: str
+
+
+class UserPasswordUpdate(ObjSchema):
+    old_password: str
+    new_password: str
+
+    @validator("new_password")
+    def password_validation(cls, v):
+        pattern = r"^(?=.*[a-zа-яё])(?=.*[A-ZА-ЯЁ])(?=.*\d).{8,}$"
+        if not re.match(pattern, v):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Пароль должен быть длиннее 8 символов, "
+                "содержать латинский заглавный и строчный символ, "
+                "а также цифру",
+            )
+
+        return v
 
 
 class UserResponse(BaseUser):
