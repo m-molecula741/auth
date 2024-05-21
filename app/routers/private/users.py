@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, Response, UploadFile, status
 from fastapi.responses import ORJSONResponse
 
 from app.core.base_schemas import ObjSchema
-from app.models.users import UserModel, UserResponse, UserUpdateIn
+from app.models.users import UserModel, UserPasswordUpdate, UserResponse, UserUpdateIn
 from app.routers.dependencies import UOWDep, get_current_active_user
 from app.services.auth_service import AuthService
 from app.services.users_service import UserService
@@ -32,6 +32,19 @@ async def update_user(
 ) -> ORJSONResponse:
     """Изменить данные профиля"""
     is_ok = await UserService.update_user(current_user.id, user_in, uow)
+    return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
+
+
+@router.patch(
+    path="/update/password", status_code=status.HTTP_200_OK, response_model=bool
+)
+async def update_user_password(
+    password_data: UserPasswordUpdate,
+    uow: UOWDep,
+    current_user: UserModel = Depends(get_current_active_user),
+) -> ORJSONResponse:
+    """Обновить пароль"""
+    is_ok = await UserService.update_password(current_user.id, password_data, uow)
     return ORJSONResponse(status_code=status.HTTP_200_OK, content=is_ok)
 
 
