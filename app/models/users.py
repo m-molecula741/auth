@@ -87,7 +87,6 @@ class UserUpdateIn(BaseUserUpdate):
 
 class UserUpdate(BaseUserUpdate):
     is_active: bool = True
-    hashed_password: str
 
 
 class UserPasswordUpdate(ObjSchema):
