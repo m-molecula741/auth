@@ -115,7 +115,7 @@ async def get_users(uow: UOWDep, query: QueryUsers = Depends()) -> UsersResponse
 async def get_user_by_id(uow: UOWDep, user_id: UUID) -> UserResponse:
     """Получение пользователя по id"""
     async with uow:
-        user_resp, err = await uow.users.find_one(id=user_id)
+        user_resp, err = await uow.users.find_one(id=user_id, is_active=True)
         if err:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=err)
     user_resp.email = "***@mail.ru"  # type: ignore
