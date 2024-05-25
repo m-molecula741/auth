@@ -25,12 +25,12 @@ class UsersRepository(BaseRepository[UserModel]):
         self, query: QueryUsers
     ) -> tuple[Sequence[UserModel], int | None, str | None]:
         """Получение списка сущностей с учетом пагинации и сортировки"""
-        select_count = select(func.count(self.model.id))
+        select_count = select(func.count(self.model.id)).filter(self.model.is_active)
 
-        stmt = select(self.model)
+        stmt = select(self.model).filter(self.model.is_active)
 
         if query.nickname:
-            select_count = select_count.filter(
+            select_count = select_count.filter(  # type: ignore
                 self.model.nickname.ilike("%" + query.nickname + "%")
             )
             stmt = stmt.filter(self.model.nickname.ilike("%" + query.nickname + "%"))  # type: ignore
